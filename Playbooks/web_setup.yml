@@ -1,0 +1,55 @@
+---
+- name: Instala Web server en Ubuntu
+  hosts: ubuntu
+  become: true
+
+  tasks:
+    - name: Instala Apache
+      apt:
+        name: apache2
+        state: present
+        update_cache: yes
+
+    - name: Crea un VirtualHost www.ejemplo.com.uy
+      copy:
+        dest: /etc/apache2/sites-available/www.ejemplo.com.uy.conf
+        content: |
+          <VirtualHost *:80>
+              ServerAdmin renzo@ejemplo.com.uy
+              DocumentRoot /var/www/html
+              ServerName www.ejemplo.com.uy
+
+              ErrorLog ${APACHE_LOG_DIR}/error.log
+              CustomLog ${APACHE_LOG_DIR}/access.log combined
+          </VirtualHost>
+      notify:
+        - Restart Apache
+
+    - name: Configuración de sitio
+      command: a2ensite www.ejemplo.com.uy.conf
+      notify:
+        - Reinicia Apache
+
+    - name: HTTP habilitación en el Firewall
+      ufw:
+        rule: allow
+        name: 'Apache'
+        state: enabled
+
+    - name: Index.html
+      copy:
+        dest: /var/www/html/index.html
+        content: |
+          <html>
+            <head><title>Obligatorio2025</title></head>
+            <body>
+              <h1>Hostname: ubuntu</h1>
+              <h1>IP Address: 192.168.1.202</h1>
+            </body>
+          </html>
+
+  handlers:
+    - name: Reinicia Apache
+      service:
+        name: apache2
+        state: restarted
