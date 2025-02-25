@@ -1,0 +1,18 @@
+Preguntas
+
+1-¿Qué es Ansible y por qué es "sin agente" (agentless)?
+Es una herramienta o plataforma de automatización de IT, fue desarrollada por Redhat y facilita a los administradores de sistema la gestión de servidores y configuraciones. Es sin agente ya que no requiere la instalación de ningún software, solo utiliza ssh para conectarse y ejecutar las tareas.
+
+2-Explica la diferencia entre un comando ad-hoc y un playbook.
+Ad-hoc es una acción rápida y directa la cual solo se realiza una vez, no es el espiritud y el potencial de ansible pero es muy utilizada. Son comandos de una sola línea.
+Un playbook es un archivo de texto que describe las tareas que se deben automatizar en un inventario de soluciones,son  instrucciones (en YAML) que se pueden ejecutan en varios grupos de máquinas, se usa para tareas más complejas o repetitivas.
+
+3-¿Qué es la idempotencia y por qué es importante en Ansible?
+Las tareas de Ansible están diseñadas para ser idempotentes, lo que significa que pueden ejecutarse varias veces sin causar cambios no deseados.Los resultados deben ser los mismos sin importar la cantidad de veces que se ejecute, es pieza clave ya uqe esto le permite a ansible no hacer cambios que dañen el sistema. Esto es importante ya que da la confianza de que puedes ejecutar tus playbooks repetidamente sin temor a que afecten el sistema si ya está configurado correctamente.
+
+4-¿Cómo funcionan los handlers y cuándo deberías usarlos?
+En Ansible los handlers son tareas especiales que solo se ejecutan si algo ha cambiado en el sistema. Debes usar un handler cuando quieras que ciertas acciones solo se ejecuten si realmente se ha producido un cambio (como reiniciar un servicio solo si su configuración fue modificada).
+Funciona con una especie de "notificación": cuando una tarea realiza un cambio, notifica al handler para que lo ejecute. 
+
+5- ¿Cómo verificas errores de sintaxis en un playbook de Ansible?
+Para verificar errores de sintaxis en un playbook de Ansible, puedes usar el comando ansible-playbook --syntax-check <archivo.yml>. Este comando te ayudará a identificar errores de sintaxis antes de ejecutar el playbook en los sistemas remotos. También es buena idea revisar la salida de Ansible cuando ejecutas un playbook, ya que te dará detalles sobre el lugar y tipo de error en caso de que haya problemas.
