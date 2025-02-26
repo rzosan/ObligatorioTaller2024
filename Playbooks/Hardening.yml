@@ -11,11 +11,11 @@
         rule: allow
         name: OpenSSH
 
-    - name: Clave publica de usuario Sysadmin presente
+    - name: Clave publica de usuario ansible presente
       authorized_key:
-        user: sysadmin
+        user: ansible
         state: present
-        key: "{{ lookup('file', '/home/sysadmin/.ssh/id_rsa.pub') }}"
+        key: "{{ lookup('file', '/home/ansible/.ssh/id_rsa.pub') }}"
 
     - name: Desabilitar pass para ssh
       lineinfile:
