@@ -1,0 +1,57 @@
+---
+- name: Instala Web server en CentOS
+  hosts: centos
+  become: yes
+  
+  tasks:
+    - name: Instala Apache
+      yum:
+        name: httpd
+        state: present
+        update_cache: yes
+
+    - name: Crea un VirtualHost www.ejemplo.com.uy
+      copy:
+        dest: /etc/httpd/conf.d/www.ejemplo.com.uy.conf
+        content: |
+          <VirtualHost *:80>
+              ServerAdmin renzo@ejemplo.com.uy
+              DocumentRoot /var/www/html
+              ServerName www.ejemplo.com.uy
+
+              ErrorLog /var/log/httpd//error.log
+              CustomLog /var/log/httpd/access.log combined
+          </VirtualHost>
+      notify:
+        - Reinicia Apache
+
+    - name: Asegurarse de que Apache este habilitado y en ejecucion
+      service:
+        name: httpd
+        state: started
+        enabled: yes
+
+    - name: Habilitar HTTP en el firewall (firewalld)
+      firewalld:
+        service: http
+        permanent: yes
+        state: enabled
+        immediate: yes
+
+    - name: Index.html
+      copy:
+        dest: /var/www/html/index.html
+        content: |
+          <html>
+            <head><title>Obligatorio2025</title></head>
+            <body>
+              <h1>Hostname: centos</h1>
+              <h1>IP Address: 192.168.1.202</h1>
+            </body>
+          </html>
+
+  handlers:
+    - name: Reinicia Apache
+      service:
+        name: httpd
+        state: restarted
