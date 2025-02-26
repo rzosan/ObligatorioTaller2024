@@ -1,7 +1,8 @@
 ---
 - name: Instala Web server en CentOS
   hosts: centos
-  become: true
+  become: yes
+  
   tasks:
     - name: Instala Apache
       yum:
@@ -18,8 +19,8 @@
               DocumentRoot /var/www/html
               ServerName www.ejemplo.com.uy
 
-              ErrorLog ${APACHE_LOG_DIR}/error.log
-              CustomLog ${APACHE_LOG_DIR}/access.log combined
+              ErrorLog /var/log/httpd//error.log
+              CustomLog /var/log/httpd/access.log combined
           </VirtualHost>
       notify:
         - Reinicia Apache
